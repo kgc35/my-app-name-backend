@@ -2,10 +2,10 @@ class Application
   def call(env)
     req = Rack::Request.new(env)
 
-    if req.path.match("/hello/")
-      send_hello
-    elsif req.path.match("/sellers") && req.get?
+    if req.path.match("/sellers") && req.get?
       get_sellers
+    elsif req.path.match("/items") && req.get?
+      get_items
     elsif req.path.match("/sellers") && req.post?
       post_seller(req)
     elsif req.path.match("/sellers") && req.patch?
@@ -19,13 +19,14 @@ class Application
 
   private
 
-  def send_hello
-    return [200, { "Content-Type" => "application/json" }, [{ :message => "hello world!" }.to_json]]
-  end
-
   def get_sellers
     seller_arr = Seller.all .to_json(:include => :items)
     return [200, { "Content-Type" => "application/json" }, [seller_arr]]
+  end
+
+  def get_items
+    item_arr = Item.all.to_json
+    return [200, { "Content-Type" => "application/json" }, [item_arr]]
   end
 
   def post_seller(req)
