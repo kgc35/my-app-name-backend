@@ -6,12 +6,12 @@ class Application
       get_sellers
     elsif req.path.match("/items") && req.get?
       get_items
-    elsif req.path.match("/sellers") && req.post?
-      post_seller(req)
-    elsif req.path.match("/sellers") && req.patch?
-      patch_seller(req)
-    elsif req.path.match("/sellers") && req.delete?
-      dlt_seller(req)
+    elsif req.path.match("/items") && req.post?
+      post_item(req)
+    elsif req.path.match("/items") && req.patch?
+      patch_item(req)
+    elsif req.path.match("/items") && req.delete?
+      dlt_item(req)
     else
       send_not_found
     end
@@ -29,25 +29,25 @@ class Application
     return [200, { "Content-Type" => "application/json" }, [item_arr]]
   end
 
-  def post_seller(req)
-    seller_hash = JSON.parse(req.body.read)
-    new_seller = Seller.create(seller_hash)
-    return [201, { "Content-Type" => "application/json" }, [new_seller.display_data]]
+  def post_item(req)
+    item_hash = JSON.parse(req.body.read)
+    new_item = Item.create(item_hash)
+    return [201, { "Content-Type" => "application/json" }, [new_item.to_json]]
   end
 
-  def patch_seller(req)
+  def patch_item(req)
     edit_hash = JSON.parse(req.body.read)
     id = req.path.split("/").last
-    found_seller = Seller.find(id)
-    found_seller.update(edit_hash)
-    return [200, { 'Content-Type' => 'application/json' }, [ found_seller.display_data ]]
+    found_item = Item.find(id)
+    found_item.update(edit_hash)
+    return [200, { 'Content-Type' => 'application/json' }, [ found_item ]]
   end
 
-  def dlt_seller(req)
+  def dlt_item(req)
     id = req.path.split("/").last
-    found_seller = Seller.find(id)
-    found_seller.destroy
-    return [200, { 'Content-Type' => 'application/json' }, [ found_seller.display_data ]]
+    found_item = Item.find(id)
+    found_item.destroy
+    return [200, { 'Content-Type' => 'application/json' }, [ found_item]]
   end
 
   def send_not_found
