@@ -40,14 +40,14 @@ class Application
     id = req.path.split("/").last
     found_item = Item.find(id)
     found_item.update(edit_hash)
-    return [200, { 'Content-Type' => 'application/json' }, [ found_item ]]
+    return [200, { 'Content-Type' => 'application/json' }, [ found_item.to_json ]]
   end
 
   def dlt_item(req)
     id = req.path.split("/").last
     found_item = Item.find(id)
     found_item.destroy
-    return [200, { 'Content-Type' => 'application/json' }, [ found_item]]
+    return [200, { 'Content-Type' => 'application/json' }, [ found_item.to_json ]]
   end
 
   def send_not_found
